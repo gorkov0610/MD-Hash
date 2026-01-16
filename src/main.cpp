@@ -137,5 +137,6 @@ int main(){
     for(auto i{0}; i < 16; i++){
         std::cout << std::setw(2) << static_cast<unsigned>(bytes[i]);
     }
+    std::cin.get();
     return 0;
 }
