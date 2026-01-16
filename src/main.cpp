@@ -1,8 +1,6 @@
 #include <iostream>
-#include <string>
 #include <cstdint>
-
-using namespace std;
+#include <iomanip>
 
 constexpr uint32_t S[64]{
     7,12,17,22, 7,12,17,22, 7,12,17,22, 7,12,17,22,
@@ -52,8 +50,8 @@ uint32_t rot_left(uint32_t x, uint32_t s){
 
 
 int main(){
-    string input;
-    getline(cin, input);
+    std::string input;
+    std::getline(std::cin, input);
     
     uint64_t original_bits = input.size() * 8;
     input += '\x80';
@@ -110,16 +108,20 @@ int main(){
         D += DD;
     }
 
-    auto print_le = [](uint32_t w) {
-    for (int i = 0; i < 4; i++) {
-        printf("%02x", (w >> (8 * i)) & 0xFF);
-    }
-    };
+    uint32_t hash[4] = {A, B, C, D};
+    uint8_t bytes[16];
 
-    print_le(A);
-    print_le(B);
-    print_le(C);
-    print_le(D);
-    printf("\n");
+    for(auto i{0}; i < 4; i++){
+        bytes[i * 4] = hash[i] & 0xFF;
+        bytes[i * 4 + 1] = (hash[i] >> 8) & 0xFF;
+        bytes[i * 4 + 2] = (hash[i] >> 16) & 0xFF;
+        bytes[i * 4 + 3] = (hash[i] >> 24) & 0xFF;
+    }
+
+    std::cout << std::hex << std::uppercase << std::setfill('0');
+
+    for(auto i{0}; i < 16; i++){
+        std::cout << std::setw(2) << static_cast<unsigned>(bytes[i]);
+    }
     return 0;
 }
